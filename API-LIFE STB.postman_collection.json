@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "ae1e62d5-494c-415f-8644-06165cebc54b",
+		"name": "API-LIFE STB",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17645564"
+	},
+	"item": [
+		{
+			"name": "B2C",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.environment.set(\"bearer\", jsonData.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "f68fc9a0-d545-40dd-b23b-ac9d4fe46b2f",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "uHn8Q~eBTlzOw5W8EekoSGjc-UUhyGnn_HK79duT",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "https://visanetdev.onmicrosoft.com/bb72f555-ea8a-406c-9701-565038b5e2ef/.default",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/99a04c75-49e1-4c19-bdf7-58daa91c7f85/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"99a04c75-49e1-4c19-bdf7-58daa91c7f85",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request Calculate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const res = pm.response.json();\r",
+							"pm.test(\"Codigo de Respuesta\", () => {\r",
+							"    pm.expect(res).to.have.property(\"code\",0)\r",
+							"    pm.expect(res).to.have.property(\"message\",\"ok\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearer}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"accountRange\":\"{{accountRange}}\",\r\n\"installments\": {{installments}},\r\n\"currency\": {{currency}},\r\n\"indi\": {{indi}},\r\n\"amount\": {{amount}},\r\n\"invoiceAmount\": {{invoiceAmount}},\r\n\"taxedAmount\": {{taxedAmount}},\r\n\"tipAmount\": {{tipAmount}},\r\n\"cashBack\": {{cashBack}},\r\n\"vatAmount\": {{vatAmount}},\r\n\"finalConsumer\": {{finalConsumer}},\r\n\"invoiceNumber\": \"{{invoiceNumber}}\",\r\n\"merchantId\": \"{{merchantId}}\"\r\n}"
+				},
+				"url": {
+					"raw": "https://sandbox-api.vnet.uy/lif/calculate",
+					"protocol": "https",
+					"host": [
+						"sandbox-api",
+						"vnet",
+						"uy"
+					],
+					"path": [
+						"lif",
+						"calculate"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
